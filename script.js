@@ -10,10 +10,13 @@ document.getElementById("translate-button").addEventListener("click", function (
     const words = inputText.split(" "); // Split text into words
     const translatedWords = words.map(word => {
         const lowerWord = word.toLowerCase().replace(/[^\w]/g, ""); // Case insensitive and remove punctuation
+        
         if (direction === "toItalian") {
             return bidirectionalDictionary[lowerWord] || word; // English → Italian
+        } else if (direction === "toSpanish") {
+            return bidirectionalDictionary[lowerWord + "_es"] || word; // English → Spanish
         } else {
-            return bidirectionalDictionary[lowerWord] || word; // Italian → English
+            return bidirectionalDictionary[lowerWord] || word; // Italian → English or Spanish
         }
     });
 
