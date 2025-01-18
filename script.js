@@ -15,6 +15,8 @@ document.getElementById("translate-button").addEventListener("click", function (
             return bidirectionalDictionary[lowerWord] || word; // English → Italian
         } else if (direction === "toSpanish") {
             return bidirectionalDictionary[lowerWord + "_es"] || word; // English → Spanish
+        } else if (direction === "toEnglishFromSpanish") {
+            return bidirectionalDictionary[lowerWord + "_es"] || word; // Spanish → English
         } else {
             return bidirectionalDictionary[lowerWord] || word; // Italian → English or Spanish
         }
