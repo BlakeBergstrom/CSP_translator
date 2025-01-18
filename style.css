@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+textarea {
+    width: 80%;
+    font-size: 14px;
+    padding: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+select {
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 5px;
+}
+
+#output-text {
+    font-weight: bold;
+    color: green;
+    margin-top: 20px;
+}

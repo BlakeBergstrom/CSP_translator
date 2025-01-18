@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Translator App</h1>
+    <p>Select a translation direction and type a word or sentence:</p>
+    <select id="language-direction">
+        <option value="toItalian">English → Italian</option>
+        <option value="toEnglish">Italian → English</option>
+    </select>
+    <form id="translator-form">
+        <textarea id="input-text" rows="4" cols="40" placeholder="Enter text here..."></textarea>
+        <br>
+        <button type="button" id="translate-button">Translate</button>
+    </form>
+    <h2>Translated Text:</h2>
+    <p id="output-text"></p>
+
+    <!-- Load the dictionary first -->
+    <script src="dictionary.js"></script>
+    <!-- Load the main script -->
+    <script src="script.js"></script>
+</body>
+</html>
