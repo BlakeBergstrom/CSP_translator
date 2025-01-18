@@ -1,3 +1,4 @@
+
 document.getElementById("translate-button").addEventListener("click", function () {
     const inputText = document.getElementById("input-text").value; // Get user input
     const direction = document.getElementById("language-direction").value; // Get selected direction
@@ -15,12 +16,14 @@ document.getElementById("translate-button").addEventListener("click", function (
             return bidirectionalDictionary[lowerWord] || word; // English → Italian
         } else if (direction === "toSpanish") {
             return bidirectionalDictionary[lowerWord + "_es"] || word; // English → Spanish
-        } else if (direction === "toGerman") {
-            return bidirectionalDictionary[lowerWord + "_de"] || word; // English → German
-        } else if (direction === "toEnglishFromGerman") {
-            return bidirectionalDictionary[lowerWord] || word; // German → English
+        } else if (direction === "toEnglishFromSpanish") {
+            return bidirectionalDictionary[lowerWord + "_es"] || word; // Spanish → English
+        } else if (direction === "toSpanishFromItalian") {
+            return bidirectionalDictionary[lowerWord + "_es"] || word; // Italian → Spanish
+        } else if (direction === "toItalianFromSpanish") {
+            return bidirectionalDictionary[lowerWord + "_it"] || word; // Spanish → Italian
         } else {
-            return bidirectionalDictionary[lowerWord] || word; // Default case
+            return bidirectionalDictionary[lowerWord] || word; // Italian → English or Spanish
         }
     });
 
