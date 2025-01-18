@@ -1,3 +1,4 @@
+
 document.getElementById("translate-button").addEventListener("click", function () {
     const inputText = document.getElementById("input-text").value; // Get user input
     const direction = document.getElementById("language-direction").value; // Get selected direction
