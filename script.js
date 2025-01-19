@@ -1,42 +1,86 @@
+const dictionaryMapping = {
+    toItalian: "dictionaries/english_italian.js",
+    toEnglish: "dictionaries/italian_english.js",
+    toSpanish: "dictionaries/english_spanish.js",
+    toEnglishFromSpanish: "dictionaries/spanish_english.js",
+    toSpanishFromItalian: "dictionaries/italian_spanish.js",
+    toItalianFromSpanish: "dictionaries/spanish_italian.js"
+};
 
+// Function to load a dictionary dynamically
+function loadDictionary(dictionaryPath, callback) {
+    const script = document.createElement("script");
+    script.src = dictionaryPath;
+    script.type = "text/javascript";
+
+    // When the script is successfully loaded
+    script.onload = () => {
+        console.log(`Dictionary loaded: ${dictionaryPath}`);
+        callback();
+    };
+
+    // Handle loading errors
+    script.onerror = (error) => {
+        console.error(`Error loading dictionary script: ${dictionaryPath}`, error);
+        document.getElementById("output-text").textContent = "Error loading dictionary. Please try again.";
+    };
+
+    document.head.appendChild(script);
+}
+
+// Add event listener for the translate button
 document.getElementById("translate-button").addEventListener("click", function () {
-    const inputText = document.getElementById("input-text").value; // Get user input
+    const inputText = document.getElementById("input-text").value.trim(); // Get user input
     const direction = document.getElementById("language-direction").value; // Get selected direction
 
-    if (!inputText.trim()) {
+    if (!inputText) {
         document.getElementById("output-text").textContent = "Please enter text to translate.";
         return;
     }
 
-    const words = inputText.split(" "); // Split text into words
-    const translatedWords = words.map(word => {
-        const lowerWord = word.toLowerCase().replace(/[^\w]/g, ""); // Case insensitive and remove punctuation
+    // Load the appropriate dictionary
+    const dictionaryPath = dictionaryMapping[direction];
+    if (!dictionaryPath) {
+        document.getElementById("output-text").textContent = "Invalid translation direction selected.";
+        return;
+    }
 
-        let translation = word; // Default translation is the original word
-
-        // Check the selected translation direction
-        if (direction === "toItalian") {
-            // English → Italian
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
-        } else if (direction === "toSpanish") {
-            // English → Spanish
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
-        } else if (direction === "toEnglishFromSpanish") {
-            // Spanish → English
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
-        } else if (direction === "toSpanishFromItalian") {
-            // Italian → Spanish
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
-        } else if (direction === "toItalianFromSpanish") {
-            // Spanish → Italian
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord + "_it")?.[1] || word;
-        } else {
-            // Default for Italian → English
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
+    loadDictionary(dictionaryPath, () => {
+        let dictionary;
+        switch (direction) {
+            case "toItalian":
+                dictionary = englishToItalian;
+                break;
+            case "toEnglish":
+                dictionary = italianToEnglish;
+                break;
+            case "toSpanish":
+                dictionary = englishToSpanish;
+                break;
+            case "toEnglishFromSpanish":
+                dictionary = spanishToEnglish;
+                break;
+            case "toSpanishFromItalian":
+                dictionary = italianToSpanish;
+                break;
+            case "toItalianFromSpanish":
+                dictionary = spanishToItalian;
+                break;
         }
 
-        return translation; // Return translated word
-    });
+        if (!dictionary) {
+            document.getElementById("output-text").textContent = "Error: Dictionary not loaded.";
+            return;
+        }
 
-    document.getElementById("output-text").textContent = translatedWords.join(" "); // Join translated words
+        // Translate the input text
+        const words = inputText.split(/\s+/); // Split text into words
+        const translatedWords = words.map(word => {
+            const lowerWord = word.toLowerCase().replace(/[^\w]/g, ""); // Normalize the word
+            return dictionary[lowerWord] || word; // Translate or keep the original word
+        });
+
+        // Display the translated text
+        document.getElementById("output-text").textContent = translatedWords.join(" ");
+    });
 });
