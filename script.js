@@ -1,86 +1,66 @@
-const dictionaryMapping = {
-    toItalian: "dictionaries/english_italian.js",
-    toEnglish: "dictionaries/italian_english.js",
-    toSpanish: "dictionaries/english_spanish.js",
-    toEnglishFromSpanish: "dictionaries/spanish_english.js",
-    toSpanishFromItalian: "dictionaries/italian_spanish.js",
-    toItalianFromSpanish: "dictionaries/spanish_italian.js"
-};
+let dictionary = {};
 
-// Function to load a dictionary dynamically
-function loadDictionary(dictionaryPath, callback) {
-    const script = document.createElement("script");
-    script.src = dictionaryPath;
-    script.type = "text/javascript";
+function loadDictionary(languageFrom, languageTo) {
+    let fileName = '';
 
-    // When the script is successfully loaded
-    script.onload = () => {
-        console.log(`Dictionary loaded: ${dictionaryPath}`);
-        callback();
+    // Set the correct dictionary file based on selected languages
+    if (languageFrom === 'english' && languageTo === 'italian') {
+        fileName = 'english_italian.js';
+    } else if (languageFrom === 'italian' && languageTo === 'english') {
+        fileName = 'italian_english.js';
+    } else if (languageFrom === 'english' && languageTo === 'spanish') {
+        fileName = 'english_spanish.js';
+    } else if (languageFrom === 'spanish' && languageTo === 'english') {
+        fileName = 'spanish_english.js';
+    } else if (languageFrom === 'spanish' && languageTo === 'italian') {
+        fileName = 'spanish_italian.js';
+    } else if (languageFrom === 'italian' && languageTo === 'spanish') {
+        fileName = 'italian_spanish.js';
+    }
+
+    // Dynamically load the dictionary script
+    const script = document.createElement('script');
+    script.src = `dictionaries/${fileName}`;
+
+    script.onload = function () {
+        console.log(`${fileName} loaded successfully`);
     };
 
-    // Handle loading errors
-    script.onerror = (error) => {
-        console.error(`Error loading dictionary script: ${dictionaryPath}`, error);
-        document.getElementById("output-text").textContent = "Error loading dictionary. Please try again.";
+    script.onerror = function () {
+        console.error(`Error loading ${fileName}`);
     };
 
     document.head.appendChild(script);
 }
 
-// Add event listener for the translate button
-document.getElementById("translate-button").addEventListener("click", function () {
-    const inputText = document.getElementById("input-text").value.trim(); // Get user input
-    const direction = document.getElementById("language-direction").value; // Get selected direction
+function translate() {
+    // Get input word and language settings
+    const word = document.getElementById("inputWord").value.toLowerCase();
+    const languageFrom = document.getElementById("languageFrom").value;
+    const languageTo = document.getElementById("languageTo").value;
+    
+    // Load the correct dictionary
+    loadDictionary(languageFrom, languageTo);
 
-    if (!inputText) {
-        document.getElementById("output-text").textContent = "Please enter text to translate.";
-        return;
-    }
+    let translatedWord = "Word not found";
 
-    // Load the appropriate dictionary
-    const dictionaryPath = dictionaryMapping[direction];
-    if (!dictionaryPath) {
-        document.getElementById("output-text").textContent = "Invalid translation direction selected.";
-        return;
-    }
-
-    loadDictionary(dictionaryPath, () => {
-        let dictionary;
-        switch (direction) {
-            case "toItalian":
-                dictionary = englishToItalian;
-                break;
-            case "toEnglish":
-                dictionary = italianToEnglish;
-                break;
-            case "toSpanish":
-                dictionary = englishToSpanish;
-                break;
-            case "toEnglishFromSpanish":
-                dictionary = spanishToEnglish;
-                break;
-            case "toSpanishFromItalian":
-                dictionary = italianToSpanish;
-                break;
-            case "toItalianFromSpanish":
-                dictionary = spanishToItalian;
-                break;
+    // Wait for the dictionary to load, then translate
+    setTimeout(() => {
+        if (languageFrom === 'english' && languageTo === 'italian') {
+            translatedWord = englishToItalian[word] || translatedWord;
+        } else if (languageFrom === 'italian' && languageTo === 'english') {
+            translatedWord = italianToEnglish[word] || translatedWord;
+        } else if (languageFrom === 'english' && languageTo === 'spanish') {
+            translatedWord = englishToSpanish[word] || translatedWord;
+        } else if (languageFrom === 'spanish' && languageTo === 'english') {
+            translatedWord = spanishToEnglish[word] || translatedWord;
+        } else if (languageFrom === 'spanish' && languageTo === 'italian') {
+            translatedWord = spanishToItalian[word] || translatedWord;
+        } else if (languageFrom === 'italian' && languageTo === 'spanish') {
+            translatedWord = italianToSpanish[word] || translatedWord;
         }
 
-        if (!dictionary) {
-            document.getElementById("output-text").textContent = "Error: Dictionary not loaded.";
-            return;
-        }
-
-        // Translate the input text
-        const words = inputText.split(/\s+/); // Split text into words
-        const translatedWords = words.map(word => {
-            const lowerWord = word.toLowerCase().replace(/[^\w]/g, ""); // Normalize the word
-            return dictionary[lowerWord] || word; // Translate or keep the original word
-        });
-
-        // Display the translated text
-        document.getElementById("output-text").textContent = translatedWords.join(" ");
-    });
-});
+        // Display the translation
+        document.getElementById("translatedWord").innerText = translatedWord;
+    }, 1000); // Allow some time for the script to load
+}

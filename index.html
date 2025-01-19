@@ -4,28 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Translator</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>Translator</h1>
-    <p>Select a translation direction and type a word or sentence:</p>
-    <select id="language-direction">
-        <option value="toItalian">English → Italian</option>
-        <option value="toEnglish">Italian → English</option>
-        <option value="toSpanish">English → Spanish</option>
-        <option value="toEnglishFromSpanish">Spanish → English</option>
-        <option value="toSpanishFromItalian">Italian → Spanish</option>
-        <option value="toItalianFromSpanish">Spanish → Italian</option>
-    </select>
-    <form id="translator-form">
-        <textarea id="input-text" rows="4" cols="40" placeholder="Enter text here..."></textarea>
-        <br>
-        <button type="button" id="translate-button">Translate</button>
-    </form>
-    <h2>Translated Text:</h2>
-    <p id="output-text"></p>
+    <h1>Online Translator</h1>
 
-    <!-- Load the main script -->
-    <script src="script.js"></script>
+    <input type="text" id="inputWord" placeholder="Enter word" />
+    
+    <label for="languageFrom">From: </label>
+    <select id="languageFrom">
+        <option value="english">English</option>
+        <option value="spanish">Spanish</option>
+        <option value="italian">Italian</option>
+    </select>
+    
+    <label for="languageTo">To: </label>
+    <select id="languageTo">
+        <option value="spanish">Spanish</option>
+        <option value="english">English</option>
+        <option value="italian">Italian</option>
+    </select>
+    
+    <button onclick="translate()">Translate</button>
+    
+    <p id="translatedWord"></p>
 </body>
 </html>
