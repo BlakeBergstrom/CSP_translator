@@ -23,31 +23,28 @@ document.getElementById("translate-button").addEventListener("click", function (
         // Default translation is the original word itself
         let translation = word;
 
-        // Check the selected translation direction and look up the translation in the dictionary
-        if (direction === "toItalian") {
-            // If translating to Italian, find the translation in the dictionary
-            translation = dictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
-        } else if (direction === "toSpanish") {
-            // If translating to Spanish, look for the translation with "_es" suffix (for Spanish)
-            translation = dictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
-        } else if (direction === "toEnglishFromSpanish") {
-            // If translating from Spanish to English, find the English translation
-            translation = dictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
-        } else if (direction === "toSpanishFromItalian") {
-            // If translating from Italian to Spanish, look for the translation with "_es" suffix
-            translation = dictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
+        // Simplified translation logic using a lookupKey based on the direction
+        let lookupKey = lowerWord;
+
+        // Set the lookupKey based on the translation direction
+        if (direction === "toSpanish" || direction === "toSpanishFromItalian") {
+            lookupKey = lowerWord + "_es"; // For Spanish, append "_es"
         } else if (direction === "toItalianFromSpanish") {
-            // If translating from Spanish to Italian, look for the translation with "_it" suffix (for Italian)
-            translation = dictionary.find(pair => pair[0] === lowerWord + "_it")?.[1] || word;
-        } else {
-            // Default case (Italian to English)
-            translation = dictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
+            lookupKey = lowerWord + "_it"; // For Italian, append "_it"
         }
+
+        // Find the translation from the dictionary using the lookupKey
+        translation = findTranslation(lookupKey) || word;
 
         // Return the translated word (or the original word if no translation is found)
         return translation;
     });
 
-    // Join the translated words into a single string with spaces in between
+    // Join the translated words into a single string with spaces in between and display the result
     document.getElementById("output-text").textContent = translatedWords.join(" ");
 });
+
+// Helper function to find the translation in the dictionary
+function findTranslation(key) {
+    return dictionary.find(pair => pair[0] === key)?.[1];
+}
