@@ -1,4 +1,4 @@
-const bidirectionalDictionary = [
+const dictionary = [
     // English → Italian
     ["hello", "ciao"],
     ["world", "mondo"],

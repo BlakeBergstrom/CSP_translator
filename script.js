@@ -1,42 +1,53 @@
-
 document.getElementById("translate-button").addEventListener("click", function () {
-    const inputText = document.getElementById("input-text").value; // Get user input
-    const direction = document.getElementById("language-direction").value; // Get selected direction
+    // Get the user input from the input field
+    const inputText = document.getElementById("input-text").value;
 
+    // Get the selected language direction from the dropdown (e.g., toItalian, toSpanish)
+    const direction = document.getElementById("language-direction").value;
+
+    // Check if the input text is empty (after trimming leading/trailing spaces)
     if (!inputText.trim()) {
+        // If empty, display a message asking the user to enter text
         document.getElementById("output-text").textContent = "Please enter text to translate.";
-        return;
+        return; // Exit the function early
     }
 
-    const words = inputText.split(" "); // Split text into words
+    // Split the input text into an array of words based on spaces
+    const words = inputText.split(" ");
+
+    // Process each word in the array to get its translation
     const translatedWords = words.map(word => {
-        const lowerWord = word.toLowerCase().replace(/[^\w]/g, ""); // Case insensitive and remove punctuation
+        // Convert the word to lowercase and remove any non-alphanumeric characters (punctuation)
+        const lowerWord = word.toLowerCase().replace(/[^\w]/g, "");
 
-        let translation = word; // Default translation is the original word
+        // Default translation is the original word itself
+        let translation = word;
 
-        // Check the selected translation direction
+        // Check the selected translation direction and look up the translation in the dictionary
         if (direction === "toItalian") {
-            // English → Italian
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
+            // If translating to Italian, find the translation in the dictionary
+            translation = dictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
         } else if (direction === "toSpanish") {
-            // English → Spanish
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
+            // If translating to Spanish, look for the translation with "_es" suffix (for Spanish)
+            translation = dictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
         } else if (direction === "toEnglishFromSpanish") {
-            // Spanish → English
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
+            // If translating from Spanish to English, find the English translation
+            translation = dictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
         } else if (direction === "toSpanishFromItalian") {
-            // Italian → Spanish
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
+            // If translating from Italian to Spanish, look for the translation with "_es" suffix
+            translation = dictionary.find(pair => pair[0] === lowerWord + "_es")?.[1] || word;
         } else if (direction === "toItalianFromSpanish") {
-            // Spanish → Italian
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord + "_it")?.[1] || word;
+            // If translating from Spanish to Italian, look for the translation with "_it" suffix (for Italian)
+            translation = dictionary.find(pair => pair[0] === lowerWord + "_it")?.[1] || word;
         } else {
-            // Default for Italian → English
-            translation = bidirectionalDictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
+            // Default case (Italian to English)
+            translation = dictionary.find(pair => pair[0] === lowerWord)?.[1] || word;
         }
 
-        return translation; // Return translated word
+        // Return the translated word (or the original word if no translation is found)
+        return translation;
     });
 
-    document.getElementById("output-text").textContent = translatedWords.join(" "); // Join translated words
+    // Join the translated words into a single string with spaces in between
+    document.getElementById("output-text").textContent = translatedWords.join(" ");
 });
