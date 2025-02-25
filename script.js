@@ -18,7 +18,7 @@ document.getElementById("translate-button").addEventListener("click", function (
     // Process each word in the array to get its translation
     const translatedWords = words.map(word => {
         // Convert the word to lowercase and remove any non-alphanumeric characters (punctuation)
-        const lowerWord = word.toLowerCase().replace(/[^\w]/g, "");
+        const lowerWord = word.toLowerCase().replace(/[^\w]/g, ""); // method /[^\w] represents all non alphanumeric charecters and method /g ensures this is done globally without the need for a loop
 
         // Default translation is the original word itself
         let translation = word;
