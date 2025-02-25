@@ -1,4 +1,4 @@
-document.getElementById("translate-button").addEventListener("click", function () {
+document.getElementById("translate-button").addEventListener("click", function() {
     // Get the user input from the input field
     const inputText = document.getElementById("input-text").value;
 
